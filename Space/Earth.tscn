@@ -1,0 +1,24 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Space/CelestialBody.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Terrestrial1.png" type="Texture" id=2]
+
+[sub_resource type="SphereShape" id=1]
+resource_local_to_scene = true
+
+[sub_resource type="SphereMesh" id=2]
+resource_local_to_scene = true
+
+[sub_resource type="SpatialMaterial" id=3]
+albedo_texture = ExtResource( 2 )
+
+[node name="Earth" instance=ExtResource( 1 )]
+mass = 0.01
+radius = 1.0
+
+[node name="CollisionShape" parent="." index="0"]
+shape = SubResource( 1 )
+
+[node name="MeshInstance" parent="CollisionShape" index="0"]
+mesh = SubResource( 2 )
+material/0 = SubResource( 3 )

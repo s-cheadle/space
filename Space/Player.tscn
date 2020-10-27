@@ -1,0 +1,160 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://Space/Player.gd" type="Script" id=1]
+[ext_resource path="res://space_env.tres" type="Environment" id=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+void fragment()
+{
+	COLOR = vec4(sin(0.8 * TIME),sin(0.8*TIME)-1.0,sin(0.8*TIME)-1.0,0.1);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+
+[sub_resource type="InputEventAction" id=3]
+action = "camera_change"
+
+[sub_resource type="ShortCut" id=4]
+shortcut = SubResource( 3 )
+
+[sub_resource type="CapsuleShape" id=5]
+
+[sub_resource type="BoxShape" id=6]
+extents = Vector3( 0.5, 0.05, 0.5 )
+
+[sub_resource type="CylinderShape" id=7]
+radius = 0.5
+height = 1.0
+
+[sub_resource type="CapsuleMesh" id=8]
+
+[sub_resource type="CubeMesh" id=9]
+size = Vector3( 1, 0.1, 1 )
+
+[sub_resource type="CylinderMesh" id=10]
+top_radius = 0.001
+bottom_radius = 0.5
+height = 1.0
+
+[node name="Player" type="KinematicBody"]
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+speed = 1.0
+rotation_speed = 0.25
+
+[node name="UI" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Panel" type="Panel" parent="UI"]
+material = SubResource( 2 )
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -102.0
+margin_right = 0.00012207
+margin_bottom = -2.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ItemList" type="HBoxContainer" parent="UI/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="SpeedLabel" type="Label" parent="UI/Panel/ItemList"]
+margin_right = 637.0
+margin_bottom = 100.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+text = "SPEED"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="XYZLabel" type="Label" parent="UI/Panel/ItemList"]
+margin_left = 641.0
+margin_right = 1278.0
+margin_bottom = 100.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+text = "XYZ"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Camera" type="Button" parent="UI/Panel/ItemList"]
+margin_left = 1282.0
+margin_right = 1920.0
+margin_bottom = 100.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+toggle_mode = true
+shortcut = SubResource( 4 )
+text = "Change Camera (q)"
+flat = true
+
+[node name="3rdPerson" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 30, 30 )
+environment = ExtResource( 2 )
+current = true
+far = 1000.0
+
+[node name="1stPerson" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.50112 )
+environment = ExtResource( 2 )
+far = 1000.0
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 5 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.50076, 0, -0.0145267 )
+shape = SubResource( 6 )
+
+[node name="CollisionShape3" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.50057, 0, 0 )
+shape = SubResource( 6 )
+
+[node name="CollisionShape4" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.039905, -0.999204, 0, 0.999204, 0.039905, -0.00464118, -0.0102162, 1.50272 )
+shape = SubResource( 7 )
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = SubResource( 8 )
+material/0 = null
+
+[node name="MeshInstance2" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49979, 0, 0 )
+mesh = SubResource( 9 )
+material/0 = null
+
+[node name="MeshInstance3" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0 )
+mesh = SubResource( 9 )
+material/0 = null
+
+[node name="MeshInstance4" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.0008775, 0, 1.47957 )
+mesh = SubResource( 10 )
+material/0 = null
+
+[node name="SpotLight" type="SpotLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.959122, 0.282994, 0, -0.282994, 0.959122, 0, -0.882135, -1 )
+spot_range = 100.0
+[connection signal="pressed" from="UI/Panel/ItemList/Camera" to="." method="_on_Camera_pressed"]
